@@ -1,0 +1,3 @@
+export const SETS_CHANGE = "SETS_CHANGE"; // TAKES TO "CREATE PROFILE SECTION"
+export const LENGTH_CHANGE = "LENGTH_CHANGE"; //
+export const GENERATE = "GENERATE";
