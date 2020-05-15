@@ -9,6 +9,10 @@ function Generator() {
     return;
   };
 
+  return (
+    <div />
+  )
+
 }
 
 export default Generator;
