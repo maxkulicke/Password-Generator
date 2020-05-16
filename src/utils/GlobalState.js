@@ -1,37 +1,50 @@
 import React, { createContext, useReducer, useContext } from "react";
 
 import {
-  SETS_CHANGE,
-  LENGTH_CHANGE,
-  GENERATE
+  GENERATE,
+  NEW_PASSWORD
 } from "./actions";
 
 export const StoreContext = createContext();
 const initialState = {
-  specialSet : "!#$%&'()*+,-./:;<=>?@[]^_`{|}~",
-  numericSet : "012345678901234567890123456789",
-  lowerCaseSet : "abcdefghijklmnopqrstuvwxyz",
-  upperCaseSet : "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  length: 0,
+  password: "",
+  generation: false,
   sets: {
-    numeric: false,
+    special: "!#$%&'()*+,-./:;<=>?@[]^_`{|}~",
+    numeric: "012345678901234567890123456789",
+    lowercase: "abcdefghijklmnopqrstuvwxyz",
+    uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  },
+  length: 0,
+  setsSelected: {
     special: false,
-    upperCase: false,
-    lowerCase: false
+    numeric: false,
+    uppercase: false,
+    lowercase: false
   }
 };
 
 const reducer = (state, action) => {
+  let { password, generation, sets, setsSelected, length } = state;
 
   switch (action.type) {
-    case SETS_CHANGE:
-      return state;
-
-    case LENGTH_CHANGE:
-      return state;
-
     case GENERATE:
-      return state;
+      let { length, sets } = action;
+
+      return {
+        ...state,
+        generation: true,
+        length: length,
+        setsSelected: { ...sets },
+      }
+
+    case NEW_PASSWORD:
+      let { password } = action;
+      return {
+        ...state,
+        generation: false,
+        password: password,
+      }
 
     default:
       return state;

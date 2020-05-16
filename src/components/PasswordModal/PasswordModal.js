@@ -1,25 +1,49 @@
 import { Modal, Button, Form } from 'react-bootstrap';
-import { SETS_CHANGE, LENGTH_CHANGE, GENERATE } from '../../utils/actions'
-import React, { useState, useEffect } from "react";
+import { GENERATE } from '../../utils/actions'
+import React, { useState, useEffect, useRef } from "react";
 import { useStoreContext } from "../../utils/GlobalState";
 
 function PasswordModal() {
   const [state, dispatch] = useStoreContext();
-  const [password, setPassword] = useState("");
-  const [show, setShow] = useState(false);
 
+  const [sets, setSets] = useState({
+    special: false,
+    numeric: false,
+    lowercase: false,
+    uppercase: false
+  })
+
+  const refs = [];
+  const specialRef = useRef(null);
+  const numericRef = useRef(null);
+  const lowercaseRef = useRef(null);
+  const uppercaseRef = useRef(null);
+  refs.push(specialRef, numericRef, lowercaseRef, uppercaseRef);
+
+  const [length, setLength] = useState(0)
+
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleGenerate = () => {
+  const handleGenerate = (event) => {
+    event.preventDefault();
+    for (const ref of refs) {
+      let { id, checked } = ref.current;
+      sets[id] = checked;
+    }
+    // console.log(sets)
     dispatch({
       type: GENERATE,
+      length: length,
+      sets: sets
     });
   }
 
-  const tbd = () => {
-    return;
-  };
+  const handleLengthChange = (event) => {
+    // console.log(event.target.value)
+    setLength(event.target.value);
+  }
 
   return (
     <>
@@ -33,11 +57,15 @@ function PasswordModal() {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="formBasicEmail">
+            <Form.Group controlId="lengthForm">
               <Form.Label>Password Length</Form.Label>
-              <Form.Control type="length" placeholder="Enter length" />
+              <Form.Control 
+              onChange={handleLengthChange} 
+              type="length" 
+              value={length}
+              placeholder="Enter Length" />
               <Form.Text className="text-muted">
-                We recommend 8 characters or more
+                We recommend 8 characters or more, 1000 character limit
     </Form.Text>
             </Form.Group>
 
@@ -46,10 +74,26 @@ function PasswordModal() {
               <Form.Text className="text-muted">
                 At least one set must be selected
     </Form.Text>
-              <Form.Check type="checkbox" label="Special characters: !#$%&'()*+,-./:;<=>?@[]^_`{|}~" />
-              <Form.Check type="checkbox" label="Numbers: 0123456789" />
-              <Form.Check type="checkbox" label="Lowercase letters: abcdefghijklmnopqrstuvwxyz" />
-              <Form.Check type="checkbox" label="Uppercase letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+              <Form.Check
+                id="special"
+                ref={specialRef}
+                type="checkbox"
+                label="Special characters: !#$%&'()*+,-./:;<=>?@[]^_`{|}~" />
+              <Form.Check
+                id="numeric"
+                ref={numericRef}
+                type="checkbox"
+                label="Numeric: 0123456789" />
+              <Form.Check
+                id="lowercase"
+                ref={lowercaseRef}
+                type="checkbox"
+                label="Lowercase letters: abcdefghijklmnopqrstuvwxyz" />
+              <Form.Check
+                id="uppercase"
+                ref={uppercaseRef}
+                type="checkbox"
+                label="Uppercase letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
             </Form.Group>
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
