@@ -29,7 +29,7 @@ function PasswordModal() {
 
   const handleGenerate = (event) => {
     event.preventDefault();
-    if(queryValidator()) {
+    if (queryValidator()) {
       for (const ref of refs) {
         let { id, checked } = ref.current;
         sets[id] = checked;
@@ -50,7 +50,7 @@ function PasswordModal() {
     let validSets = false;
     for (const ref of refs) {
       let { checked } = ref.current;
-      if (checked) { validSets = true}
+      if (checked) { validSets = true }
     }
     if (!validSets) {
       alert("At lease one character set must be selected!")
@@ -64,16 +64,20 @@ function PasswordModal() {
   }
 
   const handleCopy = (event) => {
-    event.preventDefault()
-    document.getElementById("passwordDisplay").select();
-    document.execCommand("copy");
-    alert("Your password has been copied to your clipboard!");
+    event.preventDefault();
+    if (password === "") {
+      alert("no password has been generated yet...");
+    } else {
+      document.getElementById("passwordDisplay").select();
+      document.execCommand("copy");
+      alert("Your password has been copied to your clipboard!");
+    }
   }
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Generate Your Password!
+      <Button variant="secondary" id="begin" onClick={handleShow}>
+        Random Password Generator!
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -84,11 +88,11 @@ function PasswordModal() {
           <Form>
             <Form.Group controlId="lengthForm">
               <Form.Label>Password Length</Form.Label>
-              <Form.Control 
-              onChange={handleLengthChange} 
-              type="length" 
-              value={length}
-              placeholder="Enter Length" />
+              <Form.Control
+                onChange={handleLengthChange}
+                type="length"
+                value={length}
+                placeholder="Enter Length" />
               <Form.Text className="text-muted">
                 Length must be between 8 - 200 characters
     </Form.Text>
@@ -123,14 +127,14 @@ function PasswordModal() {
 
             <Form.Group controlId="passwordDisplay">
               <Form.Label>Your random password:</Form.Label>
-              <Form.Control 
-              as="textarea" 
-              rows="3" 
-              value={password}
+              <Form.Control
+                as="textarea"
+                rows="3"
+                value={password}
               />
             </Form.Group>
 
-            <Button variant="primary" type="copy" onClick={handleCopy}>
+            <Button variant="dark" type="copy" onClick={handleCopy}>
               Copy to clipboard
   </Button>
           </Form>

@@ -8,8 +8,8 @@ import PasswordModal from "./components/PasswordModal/PasswordModal"
 function App() {
   return (
     <StoreProvider>
-      <PasswordModal></PasswordModal>
-      <Generator></Generator>
+        <PasswordModal></PasswordModal>
+        <Generator></Generator>
     </StoreProvider>
   );
 }
