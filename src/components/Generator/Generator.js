@@ -5,25 +5,11 @@ import { NEW_PASSWORD } from "../../utils/actions"
 function Generator() {
   const [state, dispatch] = useStoreContext();
   const { generation, sets, length, setsSelected } = state;
-  // const [password, setPassword] = useState("");
-
-  // check for truthy sets in setsSelected
-  // stringify those sets together
-  // random array value for {length} number of times
-  // verify contains one of each setsSelected
-  //     if not begin again
-  // return password
 
   const generator = () => {
     let combinedSets = setCombiner();
-    console.log("combinedSets")
-    console.log(combinedSets);
     let unverifiedPassword = passwordMaker(combinedSets);
-    console.log("unverifiedPassword");
-    console.log(unverifiedPassword);
     let verification = (verifier(unverifiedPassword));
-    console.log("verification")
-    console.log(verification)
     let verifiedPassword = (verification ? unverifiedPassword : generator())
     return verifiedPassword;
   }

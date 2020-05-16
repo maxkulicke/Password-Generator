@@ -1,10 +1,11 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import { GENERATE } from '../../utils/actions'
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useStoreContext } from "../../utils/GlobalState";
 
 function PasswordModal() {
   const [state, dispatch] = useStoreContext();
+  let { password } = state;
 
   const [sets, setSets] = useState({
     special: false,
@@ -20,7 +21,7 @@ function PasswordModal() {
   const uppercaseRef = useRef(null);
   refs.push(specialRef, numericRef, lowercaseRef, uppercaseRef);
 
-  const [length, setLength] = useState(0)
+  const [length, setLength] = useState("")
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -28,21 +29,38 @@ function PasswordModal() {
 
   const handleGenerate = (event) => {
     event.preventDefault();
-    for (const ref of refs) {
-      let { id, checked } = ref.current;
-      sets[id] = checked;
+    if(queryValidator()) {
+      for (const ref of refs) {
+        let { id, checked } = ref.current;
+        sets[id] = checked;
+      }
+      dispatch({
+        type: GENERATE,
+        length: length,
+        sets: sets
+      });
     }
-    // console.log(sets)
-    dispatch({
-      type: GENERATE,
-      length: length,
-      sets: sets
-    });
+  }
+
+  const queryValidator = () => {
+    let validLength = (length >= 8 && length <= 200 ? true : false);
+    if (!validLength) {
+      alert("Password length must be between 8 - 200 characters!")
+    }
+    let validSets = false;
+    for (const ref of refs) {
+      let { checked } = ref.current;
+      if (checked) { validSets = true}
+    }
+    if (!validSets) {
+      alert("At lease one character set must be selected!")
+    }
+    return (validLength && validSets ? true : false);
   }
 
   const handleLengthChange = (event) => {
-    // console.log(event.target.value)
-    setLength(event.target.value);
+    let lengthVal = (!isNaN(parseInt(event.target.value)) ? parseInt(event.target.value) : "")
+    setLength(lengthVal);
   }
 
   return (
@@ -65,7 +83,7 @@ function PasswordModal() {
               value={length}
               placeholder="Enter Length" />
               <Form.Text className="text-muted">
-                We recommend 8 characters or more, 1000 character limit
+                Length must be between 8 - 200 characters
     </Form.Text>
             </Form.Group>
 
@@ -98,7 +116,7 @@ function PasswordModal() {
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
               <Form.Label>Your random password:</Form.Label>
-              <Form.Control as="textarea" rows="3" />
+              <Form.Control as="textarea" rows="3" value={password}/>
             </Form.Group>
 
             <Button variant="primary" type="copy">
