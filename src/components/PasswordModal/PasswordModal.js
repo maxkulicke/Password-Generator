@@ -63,6 +63,13 @@ function PasswordModal() {
     setLength(lengthVal);
   }
 
+  const handleCopy = (event) => {
+    event.preventDefault()
+    document.getElementById("passwordDisplay").select();
+    document.execCommand("copy");
+    alert("Your password has been copied to your clipboard!");
+  }
+
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
@@ -87,7 +94,7 @@ function PasswordModal() {
     </Form.Text>
             </Form.Group>
 
-            <Form.Group controlId="formBasicCheckbox">
+            <Form.Group controlId="characterSets">
               <Form.Label>Select your character sets</Form.Label>
               <Form.Text className="text-muted">
                 At least one set must be selected
@@ -114,12 +121,16 @@ function PasswordModal() {
                 label="Uppercase letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
             </Form.Group>
 
-            <Form.Group controlId="exampleForm.ControlTextarea1">
+            <Form.Group controlId="passwordDisplay">
               <Form.Label>Your random password:</Form.Label>
-              <Form.Control as="textarea" rows="3" value={password}/>
+              <Form.Control 
+              as="textarea" 
+              rows="3" 
+              value={password}
+              />
             </Form.Group>
 
-            <Button variant="primary" type="copy">
+            <Button variant="primary" type="copy" onClick={handleCopy}>
               Copy to clipboard
   </Button>
           </Form>

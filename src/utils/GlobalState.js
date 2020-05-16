@@ -25,7 +25,6 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  let { password, generation, sets, setsSelected, length } = state;
 
   switch (action.type) {
     case GENERATE:
