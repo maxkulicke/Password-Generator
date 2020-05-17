@@ -43,9 +43,9 @@ function PasswordModal() {
   }
 
   const queryValidator = () => {
-    let validLength = (length >= 8 && length <= 200 ? true : false);
+    let validLength = (length >= 8 && length <= 120 ? true : false);
     if (!validLength) {
-      alert("Password length must be between 8 - 200 characters!")
+      alert("Password length must be between 8 - 120 characters!")
     }
     let validSets = false;
     for (const ref of refs) {
@@ -77,7 +77,7 @@ function PasswordModal() {
   return (
     <>
       <Button variant="secondary" id="begin" onClick={handleShow}>
-        Random Password Generator!
+        Random Password Generator
       </Button>
 
       <Modal show={show} onHide={handleClose}>
